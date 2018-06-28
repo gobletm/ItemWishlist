@@ -216,15 +216,23 @@ function ItemWishlist:IsOpen()
 end
 
 function ItemWishlist:AddItemToList(itemLink, instanceDifficulty, notes, group, tag)
+
     local itemName, newItemLink = parseInput(itemLink, instanceDifficulty)
-    local activeProfile = self.db:GetCurrentProfile()
-    self.db.profiles[activeProfile]["itemList"][itemName] = {itemLink=newItemLink, notes=notes,
+        if itemName then
+        local activeProfile = self.db:GetCurrentProfile()
+        self.db.profiles[activeProfile]["itemList"][itemName] = {itemLink=newItemLink, notes=notes,
                                                                 instanceDifficulty=instanceDifficulty,
                                                                 group=group, tooltipTag=tag}
-    self.editbox:SetText("")
-    ItemWishlist:PopulateEntries(activeProfile)
+        self.editbox:SetText("")
+        ItemWishlist:PopulateEntries(activeProfile)
+    else
+        ItemWishlist:ErrorMessage("IWL ERROR: invalid input.")
+    end
 end
 
+function ItemWishlist:ErrorMessage(msg)
+    UIErrorsFrame:AddMessage(msg, 1.0, 0.0, 0.0, 53, 5);
+end
 ------------------------------------------------------------------------------------------------
 -- Data broker
 
