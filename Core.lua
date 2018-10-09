@@ -231,7 +231,8 @@ function ItemWishlist:AddItemToList(itemLink, instanceDifficulty, notes, group, 
 end
 
 function ItemWishlist:ErrorMessage(msg)
-    UIErrorsFrame:AddMessage(msg, 1.0, 0.0, 0.0, 53, 5);
+    UIErrorsFrame:AddMessage(msg, 1.0, 0.0, 0.0, 53, 5)
+    print("|cffffa000ItemWishlist|r: " .. msg)
 end
 ------------------------------------------------------------------------------------------------
 -- Data broker
@@ -309,7 +310,9 @@ local function deleteItem(itemName)
     local activeProfile = ItemWishlist.db:GetCurrentProfile()
 
     ItemWishlist.itemInfoFrame:SetText("")
+    ItemWishlist.itemInfoFrame:SetLabel("")
     ItemWishlist.tooltipTagInputField:SetText("")
+    ItemWishlist.itemLabel:SetText("<Select Item>")
     GameTooltip:ClearLines()
     GameTooltip:Hide()
     ItemWishlist:PopulateEntries(activeProfile)
@@ -322,6 +325,7 @@ function ItemWishlist:DislpayNotes(widget, event, button)
     ItemWishlist.itemInfoFrame:SetLabel(itemName)
     ItemWishlist.itemInfoFrame:SetText(itemData.notes)
     ItemWishlist.tooltipTagInputField:SetText(itemData.tooltipTag)
+    ItemWishlist.itemLabel:SetText(itemName)
 
     ItemWishlist.itemInfoFrame.userdata.itemName = itemName
     ItemWishlist.itemGroupInputField.userdata.itemName = itemName
@@ -386,12 +390,20 @@ end
 local function saveInfoFrameChanges(widget, notes)
     local activeProfile = ItemWishlist.db:GetCurrentProfile()
     local itemName = widget.userdata.itemName
+    if not itemName then
+        ItemWishlist:ErrorMessage("No item selected!")
+        return false
+    end
     ItemWishlist.db.profiles[activeProfile]["itemList"][itemName].notes = notes
 end
 
 local function saveItemGroup(widget, group)
     local activeProfile = ItemWishlist.db:GetCurrentProfile()
     local itemName = widget.userdata.itemName
+    if not itemName then
+        ItemWishlist:ErrorMessage("No item selected!")
+        return false
+    end
     ItemWishlist.db.profiles[activeProfile]["itemList"][itemName].group = trim(group)
     widget:SetText("")
     ItemWishlist:PopulateEntries(activeProfile)
@@ -400,7 +412,10 @@ end
 local function saveTooltipTag(widget, tag)
     local activeProfile = ItemWishlist.db:GetCurrentProfile()
     local itemName = widget.userdata.itemName
-
+    if not itemName then
+        ItemWishlist:ErrorMessage("No item selected!")
+        return false
+    end
     ItemWishlist.db.profiles[activeProfile]["itemList"][itemName].tooltipTag = trim(tag)
     ItemWishlist:PopulateEntries(activeProfile)
 end
@@ -421,7 +436,7 @@ function ItemWishlist:CreateFrame()
         self.mainFrame:SetPoint(mainFrameAnchorPoints[1], mainFrameAnchorPoints[2], mainFrameAnchorPoints[3],
                             mainFrameAnchorPoints[4], mainFrameAnchorPoints[5])
     end
-    self.mainFrame:Show()
+
 
 
     local addGroup = AceGUI:Create("InlineGroup")
@@ -455,7 +470,7 @@ function ItemWishlist:CreateFrame()
 
     self.mainFrame:AddChild(addGroup)
 
-    local itemGroup = AceGUI:Create("SimpleGroup")
+    local itemGroup = AceGUI:Create("InlineGroup")
     itemGroup:SetLayout("Flow")
     itemGroup:SetRelativeWidth(1.0)
     itemGroup:SetFullHeight(true)
@@ -475,15 +490,16 @@ function ItemWishlist:CreateFrame()
     ItemWishlist:PopulateEntries(activeProfile)
 
 
-    local showGroup = AceGUI:Create("SimpleGroup")
+    local showGroup = AceGUI:Create("InlineGroup")
+    showGroup:SetFullHeight(true)
     showGroup:SetRelativeWidth(0.5)
-    showGroup:SetLayout("List")
+    showGroup:SetLayout("Flow")
 
-    -- FixMe: spacer lines to adjust the listGroup and the showGroup
-    -- this should be done with the AceGUI functions
-    local dummyLabel = AceGUI:Create("Label")
-    dummyLabel:SetText(string.rep("\n",5))
-    showGroup:AddChild(dummyLabel)
+
+    self.itemLabel = AceGUI:Create("Label")
+    self.itemLabel:SetText("<Select Item>")
+
+    showGroup:AddChild(self.itemLabel)
 
     self.itemGroupInputField = AceGUI:Create("EditBox")
     self.itemGroupInputField:SetLabel("Set Item Group")
@@ -507,12 +523,16 @@ function ItemWishlist:CreateFrame()
     self.tooltipTagInputField:SetCallback("OnEnterPressed", function(widget, event, tag) saveTooltipTag(widget, tag)  end)
 
     showGroup:AddChild(self.tooltipTagInputField)
-
+    showGroup:DoLayout()
 
     itemGroup:AddChild(listGroup)
     itemGroup:AddChild(showGroup)
+    itemGroup:DoLayout()
 
     self.mainFrame:AddChild(itemGroup)
+
+
+    self.mainFrame:Show()
 end
 
 function ItemWishlist:PopulateEntries(activeProfile)
