@@ -17,12 +17,11 @@ end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("SPELL_CONFIRMATION_PROMPT")
-frame:RegisterEvent("UNIT_SPELLCAST_START")
 
 frame:SetScript("OnEvent",
 	function(self, event, ...)
 		local spellID, confirmType, text, duration, currencyID, currencyCost, difficultyID = ...
-        if event == "SPELL_CONFIRMATION_PROMPT" and confirmType == 1 then
+        if ItemWishlist:getLootAlert() and event == "SPELL_CONFIRMATION_PROMPT" and confirmType == 1 then
             local instanceInfoID, encounterID = GetJournalInfoForSpellConfirmation(spellID)
 
             LibLootTable:SetEncounterDifficulty(difficultyID)

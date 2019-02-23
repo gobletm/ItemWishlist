@@ -105,6 +105,14 @@ function ItemWishlist:getOnlySelectetItem()
 	return self.db.profiles[self.db:GetCurrentProfile()]["showOnlySelectetItem"] or false
 end
 
+function ItemWishlist:setLootAlert(checked)
+    self.db.profiles[self.db:GetCurrentProfile()]["showLootAlert"] = checked
+end
+
+function ItemWishlist:getLootAlert()
+    return self.db.profiles[self.db:GetCurrentProfile()]["showLootAlert"] or true
+end
+
 function ItemWishlist:setOptions()
 	local options = {
 		name = "ItemWishlist",
@@ -127,12 +135,26 @@ function ItemWishlist:setOptions()
 						type = 'color',
 						name = 'tooltip tag color',
 						set = function(info, r,g,b,a) ItemWishlist:setTooltipColor(r,g,b,a, "tooltipTagColor") end,
-						get = function(info) return ItemWishlist:getTooltipColor("tooltipTagColor") end,
-					},
+						get = function(info) return ItemWishlist:getTooltipColor("tooltipTagColor") end,                        
+					},                    
 				},
 			},
+            loot = {
+                order = 2,
+                type = 'group',
+                name = "Loot options",
+                desc = "Loot options",
+                args = {
+                    lootAlert = {
+						type = 'toggle',
+						name = "display loot alert",
+						set = function(info, checked) ItemWishlist:setLootAlert(checked) end,
+						get = function(info) return ItemWishlist:getLootAlert() end,
+                    },
+                },
+            },
 			dressUp = {
-				order = 2,
+				order = 3,
 				type = 'group',
 				name = "Dressing Room",
 				desc = "Dressing Room Options",
