@@ -25,6 +25,8 @@ libs\AceGUI-3.0\AceGUI-3.0.xml
 libs\AceConfig-3.0\AceConfig-3.0.xml
 
 libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
+libs\LibLootTable-1.0\LibLootTable-1.0.lua
 #@end-no-lib-strip@
 
 Core.lua
+LootAlert.lua

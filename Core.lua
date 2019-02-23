@@ -234,6 +234,22 @@ function ItemWishlist:ErrorMessage(msg)
     UIErrorsFrame:AddMessage(msg, 1.0, 0.0, 0.0, 53, 5)
     print("|cffffa000ItemWishlist|r: " .. msg)
 end
+
+function ItemWishlist:GetItemList()
+    local activeProfile = self.db:GetCurrentProfile()
+    if self.db.profiles[activeProfile] then
+        local itemList = self.db.profiles[activeProfile]["itemList"]
+        local result = {}
+
+        if itemList and tablelength(itemList) >0 then
+            for itemName,itemData in pairsByKeys(itemList) do
+                result[itemName] = itemData["itemLink"]
+            end
+        end
+        return result
+    end
+end
+
 ------------------------------------------------------------------------------------------------
 -- Data broker
 
