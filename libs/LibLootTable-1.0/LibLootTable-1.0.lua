@@ -10,15 +10,18 @@ assert(LibStub, MAJOR.." requires LibStub")
 local LibLootTable, minor = LibStub:NewLibrary(MAJOR, MINOR)
 if not LibLootTable then return end
 
-
-function LibLootTable:GetLootTableByEncounterID(encounterID)
+local function getLootTable(ID, mode)
     EJ_ResetLootFilter()
-    if self.difficultyID then EJ_SetDifficulty(self.difficultyID) end
-    if self.classID then EJ_SetLootFilter(self.classID, self.specializationID) end
+    if LibLootTable.difficultyID then EJ_SetDifficulty(LibLootTable.difficultyID) end
+    if LibLootTable.classID then EJ_SetLootFilter(LibLootTable.classID, LibLootTable.specializationID) end
     EJ_SetSlotFilter(0)
-    EJ_SelectEncounter(encounterID)
-
-
+    
+    if mode == "instance" then 
+        EJ_SelectInstance(ID)
+    elseif mode == "encounter" then
+        EJ_SelectEncounter(ID)
+    end
+    
     local numLoot = EJ_GetNumLoot()
     if not numLoot then return end
 
@@ -30,6 +33,15 @@ function LibLootTable:GetLootTableByEncounterID(encounterID)
 
     return lootTable
 end
+
+function LibLootTable:GetLootTableByEncounterID(encounterID)
+    return getLootTable(encounterID, "encounter")
+end
+
+function LibLootTable:GetLootTableByinstanceID(instanceID)
+    return getLootTable(instanceID, "instance")
+end
+
 
 function LibLootTable:SetEncounterDifficulty(difficultyID)
     self.difficultyID = difficultyID

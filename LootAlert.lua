@@ -22,13 +22,17 @@ frame:SetScript("OnEvent",
 	function(self, event, ...)
 		local spellID, confirmType, text, duration, currencyID, currencyCost, difficultyID = ...
         if ItemWishlist:getLootAlert() and event == "SPELL_CONFIRMATION_PROMPT" and confirmType == 1 then
-            local instanceInfoID, encounterID = GetJournalInfoForSpellConfirmation(spellID)
+            local instanceID, encounterID = GetJournalInfoForSpellConfirmation(spellID)
+            local lootTable = {}
 
-            LibLootTable:SetEncounterDifficulty(difficultyID)
             LibLootTable:SetClassFilter(getClassID(), getLootSpecialization())
-            local lootTable = LibLootTable:GetLootTableByEncounterID(encounterID)
-
-
+            if difficultyID == 8 then --Mythic Keystone
+                LibLootTable:SetEncounterDifficulty(23) -- Mythic Dungeon
+                lootTable = LibLootTable:GetLootTableByinstanceID(instanceID)
+            else
+                LibLootTable:SetEncounterDifficulty(difficultyID)
+                lootTable = LibLootTable:GetLootTableByEncounterID(encounterID)
+            end
             local itemWishList = ItemWishlist:GetItemList()
             local result_msg = ""
 
@@ -42,6 +46,7 @@ frame:SetScript("OnEvent",
             if result_msg ~= "" then
                 print("|cffffa000ItemWishlist|r: This Boss can drop the following Loot that is on your wishlist\n" .. result_msg)
             end
+
 
         end
 	end)
