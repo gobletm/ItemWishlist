@@ -183,7 +183,6 @@ function ItemWishlist:OnInitialize()
     self.defaults = {
         profile = {
             itemList = {},
-            anchorPoints = {"CENTER", nil,"CENTER", 0, 0},
 			tooltipColor = {
 				r = 0.4,
 				g = 1,
@@ -215,7 +214,6 @@ function ItemWishlist:OnEnable()
     if not self.db["profiles"][self.db:GetCurrentProfile()] then
         self.db["profiles"][self.db:GetCurrentProfile()] = {}
         self.db.profiles[self.db:GetCurrentProfile()]["itemList"] = {}
-        self.db.profiles[self.db:GetCurrentProfile()]["anchorPoints"] = {"CENTER", nil,"CENTER", 0, 0}
     end
 end
 
@@ -401,7 +399,6 @@ end
 function ItemWishlist:closeWindow()
     local activeProfile = ItemWishlist.db:GetCurrentProfile()
     local point, relativeTo, relativePoint, xoffset, yoffset = ItemWishlist.mainFrame:GetPoint()
-    ItemWishlist.db.profiles[activeProfile]["anchorPoints"] = { point, nil, relativePoint, xoffset, yoffset}
     AceGUI:Release(ItemWishlist.mainFrame)
 end
 
@@ -412,14 +409,10 @@ function ItemWishlist:refreshConfig()
     if not ItemWishlist.db.profiles[activeProfile] then
         ItemWishlist.db.profiles[activeProfile] = {
             itemList = {},
-            anchorPoints = {"CENTER", nil,"CENTER", 0, 0},
         }
     else
         if not ItemWishlist.db.profiles[activeProfile]["itemList"] then
             ItemWishlist.db.profiles[activeProfile]["itemList"] = {}
-        end
-        if not ItemWishlist.db.profiles[activeProfile]["anchorPoints"] then
-            ItemWishlist.db.profiles[activeProfile]["anchorPoints"] = {"CENTER", nil,"CENTER", 0, 0}
         end
     end
 
@@ -468,12 +461,6 @@ function ItemWishlist:CreateFrame()
     self.mainFrame:SetLayout("Flow")
     self.mainFrame:SetWidth(500)
     self.mainFrame:SetHeight(550)
-
-    if  self.db.profiles[self.db:GetCurrentProfile()] and self.db.profiles[self.db:GetCurrentProfile()]["anchorPoints"] then
-        local mainFrameAnchorPoints = self.db.profiles[self.db:GetCurrentProfile()]["anchorPoints"]
-        self.mainFrame:SetPoint(mainFrameAnchorPoints[1], mainFrameAnchorPoints[2], mainFrameAnchorPoints[3],
-                            mainFrameAnchorPoints[4], mainFrameAnchorPoints[5])
-    end
 
 
 
