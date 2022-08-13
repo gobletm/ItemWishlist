@@ -52,14 +52,12 @@ local function strsplit(delimiter, text)
     return list
 end
 
-
 -- returns the length of a table with key, value pairs
 local function tablelength(T)
   local count = 0
   for _ in pairs(T) do count = count + 1 end
   return count
 end
-
 
 -- returns an iterator for a table with key, value pairs
 local function pairsByKeys (t, f)
@@ -83,25 +81,24 @@ end
 
 ------------------------------------------------------------------------------------------------
 -- functions
-
 function ItemWishlist:setTooltipColor(r,g,b,a, tooltipColorType)
-	self.db.profiles[self.db:GetCurrentProfile()][tooltipColorType] = {r = r, g = g, b = b, a = a}
+    self.db.profiles[self.db:GetCurrentProfile()][tooltipColorType] = {r = r, g = g, b = b, a = a}
 end
 
 function ItemWishlist:getTooltipColor(tooltipColorType)
-	local tooltipColor = self.db.profiles[self.db:GetCurrentProfile()][tooltipColorType]
-	if not tooltipColor then
-		return 0.4, 1, 0.4, 1
-	end
-	return tooltipColor.r, tooltipColor.g, tooltipColor.b, tooltipColor.a
+    local tooltipColor = self.db.profiles[self.db:GetCurrentProfile()][tooltipColorType]
+    if not tooltipColor then
+        return 0.4, 1, 0.4, 1
+    end
+    return tooltipColor.r, tooltipColor.g, tooltipColor.b, tooltipColor.a
 end
 
 function ItemWishlist:setOnlySelectetItem(checked)
-	self.db.profiles[self.db:GetCurrentProfile()]["showOnlySelectetItem"] = checked
+    self.db.profiles[self.db:GetCurrentProfile()]["showOnlySelectetItem"] = checked
 end
 
 function ItemWishlist:getOnlySelectetItem()
-	return self.db.profiles[self.db:GetCurrentProfile()]["showOnlySelectetItem"] or false
+    return self.db.profiles[self.db:GetCurrentProfile()]["showOnlySelectetItem"] or false
 end
 
 function ItemWishlist:setLootAlert(checked)
@@ -113,31 +110,31 @@ function ItemWishlist:getLootAlert()
 end
 
 function ItemWishlist:setOptions()
-	local options = {
-		name = "ItemWishlist",
-		handler = ItemWishlist,
-		type = 'group',
-		args = {
-			text = {
-				order = 1,
-				type = 'group',
-				name = 'Text',
-				desc = 'Text Options',
-				args = {
-					tooltipColor = {
-						type = 'color',
-						name = 'tooltip color',
-						set = function(info, r,g,b,a) ItemWishlist:setTooltipColor(r,g,b,a, "tooltipColor") end,
-						get = function(info) return ItemWishlist:getTooltipColor("tooltipColor") end,
-					},
-					tooltipTagColor = {
-						type = 'color',
-						name = 'tooltip tag color',
-						set = function(info, r,g,b,a) ItemWishlist:setTooltipColor(r,g,b,a, "tooltipTagColor") end,
-						get = function(info) return ItemWishlist:getTooltipColor("tooltipTagColor") end,
-					},
-				},
-			},
+    local options = {
+        name = "ItemWishlist",
+        handler = ItemWishlist,
+        type = 'group',
+        args = {
+            text = {
+                order = 1,
+                type = 'group',
+                name = 'Text',
+                desc = 'Text Options',
+                args = {
+                    tooltipColor = {
+                        type = 'color',
+                        name = 'tooltip color',
+                        set = function(info, r,g,b,a) ItemWishlist:setTooltipColor(r,g,b,a, "tooltipColor") end,
+                        get = function(info) return ItemWishlist:getTooltipColor("tooltipColor") end,
+                    },
+                    tooltipTagColor = {
+                        type = 'color',
+                        name = 'tooltip tag color',
+                        set = function(info, r,g,b,a) ItemWishlist:setTooltipColor(r,g,b,a, "tooltipTagColor") end,
+                        get = function(info) return ItemWishlist:getTooltipColor("tooltipTagColor") end,
+                    },
+                },
+            },
             --loot = {
             --    order = 2,
             --    type = 'group',
@@ -145,33 +142,32 @@ function ItemWishlist:setOptions()
             --    desc = "Loot options",
             --    args = {
              --       lootAlert = {
-			--			type = 'toggle',
-			--			name = "display loot alert",
-			--			set = function(info, checked) ItemWishlist:setLootAlert(checked) end,
-			--			get = function(info) return ItemWishlist:getLootAlert() end,
+            --          type = 'toggle',
+            --          name = "display loot alert",
+            --          set = function(info, checked) ItemWishlist:setLootAlert(checked) end,
+            --          get = function(info) return ItemWishlist:getLootAlert() end,
              --       },
              --   },
            -- },
-			dressUp = {
-				order = 3,
-				type = 'group',
-				name = "Dressing Room",
-				desc = "Dressing Room Options",
-				args = {
-					onlySelectetItem = {
-						type = 'toggle',
-						name = "show only selected item",
-						set = function(info, checked) ItemWishlist:setOnlySelectetItem(checked) end,
-						get = function(info) return ItemWishlist:getOnlySelectetItem() end,
-					},
-				},
-			},
-		},
-	}
+            dressUp = {
+                order = 3,
+                type = 'group',
+                name = "Dressing Room",
+                desc = "Dressing Room Options",
+                args = {
+                    onlySelectetItem = {
+                        type = 'toggle',
+                        name = "show only selected item",
+                        set = function(info, checked) ItemWishlist:setOnlySelectetItem(checked) end,
+                        get = function(info) return ItemWishlist:getOnlySelectetItem() end,
+                    },
+                },
+            },
+        },
+    }
     options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(ItemWishlist.db)
     LibStub("AceConfig-3.0"):RegisterOptionsTable("ItemWishlist", options)
     LibDualSpec:EnhanceOptions(options.args.profile, self.db)
-
 end
 
 function ItemWishlist:OnInitialize()
@@ -182,17 +178,17 @@ function ItemWishlist:OnInitialize()
     self.defaults = {
         profile = {
             itemList = {},
-			tooltipColor = {
-				r = 0.4,
-				g = 1,
-				b = 0.4,
-				a = 1},
-			tooltipTagColor = {
-				r = 0.4,
-				g = 1,
-				b = 0.4,
-				a = 1},
-			showOnlySelectetItem = false,
+            tooltipColor = {
+                r = 0.4,
+                g = 1,
+                b = 0.4,
+                a = 1},
+            tooltipTagColor = {
+                r = 0.4,
+                g = 1,
+                b = 0.4,
+                a = 1},
+            showOnlySelectetItem = false,
         }
     }
     self.db = LibStub:GetLibrary("AceDB-3.0"):New("ItemWishlistDB",self.defaults, true)
@@ -203,8 +199,8 @@ function ItemWishlist:OnInitialize()
 
     ItemWishlist:setOptions()
 
-	self:RegisterChatCommand("iwl", "ToggleFrame")
-	self:RegisterChatCommand("itemwishlist", "ToggleFrame")
+    self:RegisterChatCommand("iwl", "ToggleFrame")
+    self:RegisterChatCommand("itemwishlist", "ToggleFrame")
 
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ItemWishlist", "ItemWishlist")
 end
@@ -271,7 +267,6 @@ end
 
 ------------------------------------------------------------------------------------------------
 -- Data broker
-
 function dataobj:OnEnter()
     GameTooltip:SetOwner(self, "ANCHOR_NONE")
     GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
@@ -287,7 +282,7 @@ function dataobj:OnEnter()
         for itemName, data in pairs(itemList) do
             GameTooltip:AddLine(itemList[itemName].itemLink)
             if itemList[itemName].tooltipTag and itemList[itemName].tooltipTag ~= "" then
-				local r,g,b = ItemWishlist:getTooltipColor("tooltipTagColor")
+                local r,g,b = ItemWishlist:getTooltipColor("tooltipTagColor")
                 GameTooltip:AddLine("-> " .. itemList[itemName].tooltipTag, r, g, b, true)
             end
         end
@@ -310,7 +305,6 @@ function dataobj:OnClick(button)
             InterfaceOptionsFrame_OpenToCategory("ItemWishlist")
         end
     end
-
 end
 
 ------------------------------------------------------------------------------------------------
@@ -318,21 +312,21 @@ end
 local iconFrame = nil
 local function addIconToTooltip(link)
 
-	iconFrame = CreateFrame("Frame",nil,GameTooltip,"IconIntroTemplate")
-	iconFrame:SetSize(36,36)
-	iconFrame:SetPoint("BOTTOMLEFT",GameTooltip,"TOPLEFT",1,-1)
-	iconFrame.texture = iconFrame:CreateTexture(nil,"BACKGROUND")
-	iconFrame.texture:SetAllPoints(iconFrame)
-	iconFrame.texture:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+    iconFrame = CreateFrame("Frame",nil,GameTooltip,"IconIntroTemplate")
+    iconFrame:SetSize(36,36)
+    iconFrame:SetPoint("BOTTOMLEFT",GameTooltip,"TOPLEFT",1,-1)
+    iconFrame.texture = iconFrame:CreateTexture(nil,"BACKGROUND")
+    iconFrame.texture:SetAllPoints(iconFrame)
+    iconFrame.texture:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
 
-	local texture = select(10,GetItemInfo(link)) or ""
+    local texture = select(10,GetItemInfo(link)) or ""
 
-	if texture then
-		iconFrame.texture:SetTexture(texture)
-		iconFrame:Show()
-	else
-		iconFrame:Hide()
-	end
+    if texture then
+        iconFrame.texture:SetTexture(texture)
+        iconFrame:Show()
+    else
+        iconFrame:Hide()
+    end
 end
 
 local function SetTooltip_Hook(self, ...)
@@ -343,7 +337,7 @@ local function SetTooltip_Hook(self, ...)
         if itemList then
             local itemData = itemList[itemName]
             if itemData then
-				local r,g,b = ItemWishlist:getTooltipColor("tooltipColor")
+                local r,g,b = ItemWishlist:getTooltipColor("tooltipColor")
                 self:AddLine("On Wishlist", r, g, b, true)
                 if itemData.tooltipTag then
                     self:AddLine(itemData.tooltipTag, r, g, b, true)
@@ -390,15 +384,15 @@ local function itemLabelOnClick(widget, event, button)
     if button == "RightButton" then
         deleteItem(widget.userdata.itemName)
     elseif button == "LeftButton" then
-			if IsControlKeyDown() and IsDressableItem(widget.userdata.itemLink) then
-				DressUpItemLink(widget.userdata.itemLink)
-				if ItemWishlist:getOnlySelectetItem() then
-					DressUpModel:Undress()
-					DressUpModel:TryOn(widget.userdata.itemLink)
-				end
-			else
-				ItemWishlist:DislpayNotes(widget, event, button)
-			end
+        if IsControlKeyDown() and IsDressableItem(widget.userdata.itemLink) then
+            DressUpItemLink(widget.userdata.itemLink)
+            if ItemWishlist:getOnlySelectetItem() then
+                DressUpModel:Undress()
+                DressUpModel:TryOn(widget.userdata.itemLink)
+            end
+        else
+            ItemWishlist:DislpayNotes(widget, event, button)
+        end
     end
 end
 
@@ -407,16 +401,15 @@ local function onEnter(widget)
     GameTooltip:SetOwner(widget.frame, "ANCHOR_LEFT")
     GameTooltip:SetHyperlink(widget.userdata.itemLink)
     GameTooltip:Show()
-	addIconToTooltip(widget.userdata.itemLink)
+    addIconToTooltip(widget.userdata.itemLink)
 end
 
 local function onLeave()
-	if iconFrame ~= nil then
-		iconFrame:Hide()
-	end
+    if iconFrame ~= nil then
+        iconFrame:Hide()
+    end
     GameTooltip:Hide()
 end
-
 
 function ItemWishlist:closeWindow()
     local activeProfile = ItemWishlist.db:GetCurrentProfile()
@@ -437,7 +430,6 @@ function ItemWishlist:refreshConfig()
             ItemWishlist.db.profiles[activeProfile]["itemList"] = {}
         end
     end
-
 end
 
 local function saveInfoFrameChanges(widget, notes)
@@ -484,8 +476,6 @@ function ItemWishlist:CreateFrame()
     self.mainFrame:SetWidth(500)
     self.mainFrame:SetHeight(550)
 
-
-
     local addGroup = AceGUI:Create("InlineGroup")
     addGroup:SetTitle("Add Item")
     addGroup:SetLayout("Flow")
@@ -527,7 +517,6 @@ function ItemWishlist:CreateFrame()
     listGroup:SetLayout("Fill")
     listGroup:SetRelativeWidth(0.5)
 
-
     local itemScrollFrame = AceGUI:Create("ScrollFrame")
     itemScrollFrame:SetLayout("Flow")
     listGroup:AddChild(itemScrollFrame)
@@ -536,12 +525,10 @@ function ItemWishlist:CreateFrame()
     local activeProfile = self.db:GetCurrentProfile()
     ItemWishlist:PopulateEntries(activeProfile)
 
-
     local showGroup = AceGUI:Create("InlineGroup")
     showGroup:SetFullHeight(true)
     showGroup:SetRelativeWidth(0.5)
     showGroup:SetLayout("Flow")
-
 
     self.itemLabel = AceGUI:Create("Label")
     self.itemLabel:SetText("<Select Item>")
@@ -554,7 +541,6 @@ function ItemWishlist:CreateFrame()
     self.itemGroupInputField:SetCallback("OnEnterPressed", function(widget, event, input) saveItemGroup(widget, input)  end)
 
     showGroup:AddChild(self.itemGroupInputField)
-
 
     self.itemInfoFrame = AceGUI:Create("MultiLineEditBox")
     self.itemInfoFrame:SetText("")
@@ -578,7 +564,6 @@ function ItemWishlist:CreateFrame()
 
     self.mainFrame:AddChild(itemGroup)
 
-
     self.mainFrame:Show()
 end
 
@@ -590,7 +575,6 @@ function ItemWishlist:PopulateEntries(activeProfile)
         local itemGroups = {}
         local itemsWithoutGroups = {}
         if itemList and tablelength(itemList) >0 then
-
             for itemName,itemData in pairsByKeys(self.db.profiles[activeProfile]["itemList"]) do
                 local labelGroup = AceGUI:Create("SimpleGroup")
                 local label = AceGUI:Create("InteractiveLabel")
@@ -640,7 +624,6 @@ function ItemWishlist:PopulateEntries(activeProfile)
         end
     end
 end
-
 
 ------------------------------------------------------------------------------------------------
 -- slash commands

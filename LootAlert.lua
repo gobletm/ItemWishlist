@@ -3,14 +3,14 @@ local LibLootTable = LibStub("LibLootTable-1.0")
 
 local function getClassID()
     local _, _, classID = UnitClass('player')
-	return classID
+    return classID
 end
 
 local function getLootSpecialization()
     local lootSpecialization = GetLootSpecialization() or 0
-	if(lootSpecialization == 0) then
-		lootSpecialization = (GetSpecializationInfo(GetSpecialization() or 0)) or 0
-	end
+    if(lootSpecialization == 0) then
+        lootSpecialization = (GetSpecializationInfo(GetSpecialization() or 0)) or 0
+    end
     return lootSpecialization
 end
 
@@ -18,8 +18,8 @@ local frame = CreateFrame("Frame")
 frame:RegisterEvent("SPELL_CONFIRMATION_PROMPT")
 
 frame:SetScript("OnEvent",
-	function(self, event, ...)
-		local spellID, confirmType, text, duration, currencyID, currencyCost, difficultyID = ...
+    function(self, event, ...)
+        local spellID, confirmType, text, duration, currencyID, currencyCost, difficultyID = ...
         if ItemWishlist:getLootAlert() and event == "SPELL_CONFIRMATION_PROMPT" and confirmType == 1 then
             local instanceID, encounterID = GetJournalInfoForSpellConfirmation(spellID)
             local lootTable = {}
@@ -46,4 +46,4 @@ frame:SetScript("OnEvent",
             end
 
         end
-	end)
+    end)
