@@ -1,7 +1,6 @@
 ItemWishlistLootAlert = LibStub("AceAddon-3.0"):NewAddon("ItemWishlistLootAlert", "AceConsole-3.0", "AceEvent-3.0" )
 local LibLootTable = LibStub("LibLootTable-1.0")
 
-
 local function getClassID()
     local _, _, classID = UnitClass('player')
 	return classID
@@ -24,11 +23,10 @@ frame:SetScript("OnEvent",
         if ItemWishlist:getLootAlert() and event == "SPELL_CONFIRMATION_PROMPT" and confirmType == 1 then
             local instanceID, encounterID = GetJournalInfoForSpellConfirmation(spellID)
             local lootTable = {}
-
             LibLootTable:SetClassFilter(getClassID(), getLootSpecialization())
             if difficultyID == 8 then --Mythic Keystone
                 LibLootTable:SetEncounterDifficulty(23) -- Mythic Dungeon
-                lootTable = LibLootTable:GetLootTableByinstanceID(instanceID)
+                lootTable = LibLootTable:GetLootTableByInstanceID(instanceID)
             else
                 LibLootTable:SetEncounterDifficulty(difficultyID)
                 lootTable = LibLootTable:GetLootTableByEncounterID(encounterID)
@@ -46,7 +44,6 @@ frame:SetScript("OnEvent",
             if result_msg ~= "" then
                 print("|cffffa000ItemWishlist|r: This Boss can drop the following Loot that is on your wishlist\n" .. result_msg)
             end
-
 
         end
 	end)

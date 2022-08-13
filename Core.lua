@@ -1,4 +1,3 @@
-
 -- load libraries
 ItemWishlist = LibStub("AceAddon-3.0"):NewAddon("ItemWishlist", "AceConsole-3.0", "AceEvent-3.0")
 local ItemWishlist = ItemWishlist
@@ -110,7 +109,7 @@ function ItemWishlist:setLootAlert(checked)
 end
 
 function ItemWishlist:getLootAlert()
-    return self.db.profiles[self.db:GetCurrentProfile()]["showLootAlert"] or true
+    return self.db.profiles[self.db:GetCurrentProfile()]["showLootAlert"] or false
 end
 
 function ItemWishlist:setOptions()
@@ -135,24 +134,24 @@ function ItemWishlist:setOptions()
 						type = 'color',
 						name = 'tooltip tag color',
 						set = function(info, r,g,b,a) ItemWishlist:setTooltipColor(r,g,b,a, "tooltipTagColor") end,
-						get = function(info) return ItemWishlist:getTooltipColor("tooltipTagColor") end,                        
-					},                    
+						get = function(info) return ItemWishlist:getTooltipColor("tooltipTagColor") end,
+					},
 				},
 			},
-            loot = {
-                order = 2,
-                type = 'group',
-                name = "Loot options",
-                desc = "Loot options",
-                args = {
-                    lootAlert = {
-						type = 'toggle',
-						name = "display loot alert",
-						set = function(info, checked) ItemWishlist:setLootAlert(checked) end,
-						get = function(info) return ItemWishlist:getLootAlert() end,
-                    },
-                },
-            },
+            --loot = {
+            --    order = 2,
+            --    type = 'group',
+            --    name = "Loot options",
+            --    desc = "Loot options",
+            --    args = {
+             --       lootAlert = {
+			--			type = 'toggle',
+			--			name = "display loot alert",
+			--			set = function(info, checked) ItemWishlist:setLootAlert(checked) end,
+			--			get = function(info) return ItemWishlist:getLootAlert() end,
+             --       },
+             --   },
+           -- },
 			dressUp = {
 				order = 3,
 				type = 'group',
@@ -316,6 +315,25 @@ end
 
 ------------------------------------------------------------------------------------------------
 -- event handler
+local iconFrame = nil
+local function addIconToTooltip(link)
+
+	iconFrame = CreateFrame("Frame",nil,GameTooltip,"IconIntroTemplate")
+	iconFrame:SetSize(36,36)
+	iconFrame:SetPoint("BOTTOMLEFT",GameTooltip,"TOPLEFT",1,-1)
+	iconFrame.texture = iconFrame:CreateTexture(nil,"BACKGROUND")
+	iconFrame.texture:SetAllPoints(iconFrame)
+	iconFrame.texture:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+
+	local texture = select(10,GetItemInfo(link)) or ""
+
+	if texture then
+		iconFrame.texture:SetTexture(texture)
+		iconFrame:Show()
+	else
+		iconFrame:Hide()
+	end
+end
 
 local function SetTooltip_Hook(self, ...)
     local itemName, link = self:GetItem()
@@ -389,9 +407,13 @@ local function onEnter(widget)
     GameTooltip:SetOwner(widget.frame, "ANCHOR_LEFT")
     GameTooltip:SetHyperlink(widget.userdata.itemLink)
     GameTooltip:Show()
+	addIconToTooltip(widget.userdata.itemLink)
 end
 
 local function onLeave()
+	if iconFrame ~= nil then
+		iconFrame:Hide()
+	end
     GameTooltip:Hide()
 end
 
