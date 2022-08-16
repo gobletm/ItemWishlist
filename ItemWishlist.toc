@@ -4,7 +4,7 @@
 ## Version: 0.12.1
 ## Notes: A list to note down items you like to get
 ## X-Category: Interface Enhancements
-## X-Website: https://wow.curseforge.com/projects/item-wishlist
+## X-Website: https://github.com/gobletm/ItemWishlist
 ## DefaultState: Enabled
 ## SavedVariables: ItemWishlistDB
 ## OptionalDeps: Ace3, LibDualSpec-1.0, LibDataBroker-1.1
@@ -30,4 +30,4 @@ libs\LibLootTable-1.0\LibLootTable-1.0.lua
 #@end-no-lib-strip@
 
 Core.lua
-LootAlert.lua
+#LootAlert.lua
