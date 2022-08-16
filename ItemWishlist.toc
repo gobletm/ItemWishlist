@@ -8,6 +8,7 @@
 ## DefaultState: Enabled
 ## SavedVariables: ItemWishlistDB
 ## OptionalDeps: Ace3, LibDualSpec-1.0, LibDataBroker-1.1
+## X-Wago-ID: as3Dfg57
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
