@@ -1,4 +1,0 @@
-ignore:
-  - .git          
-  - .github
-  - .pkgmeta
