@@ -1,7 +1,7 @@
 ## Interface: 90105
 ## Title: ItemWishlist
 ## Author: Leroy1676
-## Version: 0.12.1
+## Version: 0.12.2
 ## Notes: A list to note down items you like to get
 ## X-Category: Interface Enhancements
 ## X-Website: https://github.com/gobletm/ItemWishlist
